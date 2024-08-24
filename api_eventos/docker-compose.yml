@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app_peti:
+    container_name: PROYECTO_APP_PETI_FLASK_MGAC_JZZP
+    build: .
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db_mysql
+    volumes:
+      - ./app:/app
+    command: python /app/app.py
+
+  db_mysql:
+    container_name: BASE_DATOS_MYSQL  
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'dbplanestrategico'
+      MYSQL_USER: 'mayner'
+      MYSQL_PASSWORD: '2020067145'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3306:3306"
+    volumes:
+      # - ./data:/var/lib/mysql
+      - ./database/dbplanestrategico.sql:/docker-entrypoint-initdb.d/dbplanestrategico.sql
+
+  adminer:
+    container_name: ADMINER_MANAGEMENT
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
