@@ -1,0 +1,39 @@
+1. Obtener Todos los Eventos (GET)
+
+Invoke-WebRequest -Uri http://127.0.0.1:5000/events
+
+curl.exe -X GET http://127.0.0.1:5000/events
+
+
+2. Crear un Evento (POST)
+
+$body = @{
+    name = "Nuevo Evento"
+    date = "2024-10-01"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri http://127.0.0.1:5000/events -Method Post -Body $body -ContentType "application/json"
+
+
+3. Obtener un Evento por ID (GET)
+
+Invoke-WebRequest -Uri http://127.0.0.1:5000/events/1
+
+curl.exe -X GET http://127.0.0.1:5000/events/1
+
+
+4. Actualizar un Evento (PUT)
+
+$body = @{
+    name = "Evento Actualizado"
+    date = "2024-10-01"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri http://127.0.0.1:5000/events/1 -Method Put -Body $body -ContentType "application/json"
+
+
+5. Eliminar un Evento (DELETE)
+
+Invoke-WebRequest -Uri http://127.0.0.1:5000/events/1 -Method Delete
+
+curl.exe -X DELETE http://127.0.0.1:5000/events/1
