@@ -25,10 +25,22 @@ api_lugares/
 │   ├── schemas.py
 │   ├── config.py
 │
+├── docker-compose.yml
+├── Dockerfile
 └── requirements.txt
 ```
+## Usando Docker Compose
 
-## Instalación
+1. Para levantar los servicios definidos en el archivo docker-compose.yml, utilizamos el comando:
+   ```bash
+   docker-compose up
+   ```
+   Otra opcion es ejecutar los contenedores en segundo plano, evitando que los logs se muestren en la consola con la opción -d (detached mode):
+   ```bash
+   docker-compose up -d
+   ```
+
+## Instalación Local
 
 1. Clonar el repositorio:
 
@@ -143,3 +155,5 @@ Puedes acceder a la documentación generada por Swagger en la ruta `/docs`. Esta
 | `pip install couchdb`           | Instala la librería de Python para interactuar con CouchDB.                       |
 | `pip freeze > requirements.txt` | Guarda una lista de las dependencias instaladas en un archivo `requirements.txt`. |
 | `uvicorn main:app --reload`     | Ejecuta el servidor FastAPI con recarga automática en caso de cambios.            |
+| `docker-compose up	`    | Levanta los servicios definidos en el archivo docker-compose.yml.                         |
+| `docker-compose up -d	`     | Ejecuta los servicios de Docker Compose en segundo plano (modo detached).             |
