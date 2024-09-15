@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-# Schemas para Lugares
+#Lugares
 class LugarBase(BaseModel):
     nombre_lugar: str
     direccion_id: str
@@ -14,7 +14,7 @@ class LugarBase(BaseModel):
 class LugarCreate(LugarBase):
     pass
 
-# Schemas para Direcciones
+#Direcciones
 class DireccionBase(BaseModel):
     calle: str
     numero: str
@@ -25,7 +25,7 @@ class DireccionBase(BaseModel):
 class DireccionCreate(DireccionBase):
     pass
 
-# Schemas para Categorías
+#Categorias
 class CategoriaBase(BaseModel):
     nombre_categoria: str
 

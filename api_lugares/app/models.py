@@ -10,6 +10,7 @@ class Lugar(BaseModel):
     latitud: float
     longitud: float
     id_categoria: str
+    estado: int = 1  # 1 para activo, 0 para inactivo (default: activo)
 
 class Direccion(BaseModel):
     direccion_id: str
@@ -17,8 +18,10 @@ class Direccion(BaseModel):
     numero: str
     ciudad: str
     codigo_postal: str
-    pais: str | None = None  # Campo opcional
+    pais: str | None = None
+    estado: int = 1  # 1 para activo, 0 para inactivo
 
 class Categoria(BaseModel):
     id_categoria: str
     nombre_categoria: str
+    estado: int = 1  # 1 para activo, 0 para inactivo
