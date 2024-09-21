@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from .schemas import LugarCreate, DireccionCreate, CategoriaCreate
+from fastapi.middleware.cors import CORSMiddleware
+
 from .crud import (
     create_lugar, get_lugares, get_lugar, update_lugar, deactivate_lugar, 
     create_direccion, get_direcciones, get_direccion, update_direccion, deactivate_direccion, 
@@ -9,6 +11,14 @@ from .crud import (
 from .config import setup_db
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Configuración inicial de la base de datos
 setup_db()
