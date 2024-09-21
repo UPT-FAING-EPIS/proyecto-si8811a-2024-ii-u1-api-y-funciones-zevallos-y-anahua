@@ -12,6 +12,7 @@ services:
       - COUCHDB_PASSWORD=admin
 
   fastapi:
+    #image: palbertt/automatizacion:api2-v1.0.0
     build: .
     container_name: fastapi
     ports:
