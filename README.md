@@ -23,12 +23,31 @@ api_lugares/
 │   ├── crud.py
 │   ├── models.py
 │   ├── schemas.py
-│   ├── config.py
+│   └── config.py
 │
+├── tests/
+│   ├── __init__.py
+│   ├── test_schemas.py
+│   └── test_config.py
+│
+├── docker-compose.yml
+├── Dockerfile
 └── requirements.txt
-```
+└── dev-requirements.txt
 
-## Instalación
+```
+## Usando un archivo de Docker Compose
+
+1. Para levantar los servicios definidos en el archivo docker-compose.yml, utilizamos el comando:
+   ```bash
+   docker-compose up
+   ```
+   Otra opcion es ejecutar los contenedores en segundo plano, evitando que los logs se muestren en la consola con la opción -d (detached mode):
+   ```bash
+   docker-compose up -d
+   ```
+
+## Instalación Local
 
 1. Clonar el repositorio:
 
@@ -73,15 +92,24 @@ api_lugares/
   - `GET /lugares/`: Obtener todos los lugares.
   - `POST /lugares/`: Crear un nuevo lugar.
   - `GET /lugares/{id_lugar}`: Obtener un lugar por su ID.
+  - `PUT /lugares/{id_lugar}`: Actualizar un lugar por su ID.
+  - `DELETE /lugares/{id_lugar}`: Desactivar un lugar por su ID.
 
 - **Direcciones**
 
   - `GET /direcciones/`: Obtener todas las direcciones.
   - `POST /direcciones/`: Crear una nueva dirección.
+  - `GET /direcciones/{id_direccion}`: Obtener una dirección por su ID.
+  - `PUT /direcciones/{id_direccion}`: Actualizar una dirección por su ID.
+  - `DELETE /direcciones/{id_direccion}`: Desactivar una dirección por su ID.
 
 - **Categorías**
+
   - `GET /categorias/`: Obtener todas las categorías.
   - `POST /categorias/`: Crear una nueva categoría.
+  - `GET /categorias/{id_categoria}`: Obtener una categoría por su ID.
+  - `PUT /categorias/{id_categoria}`: Actualizar una categoría por su ID.
+  - `DELETE /categorias/{id_categoria}`: Desactivar una categoría por su ID.
 
 ## Diagrama de Clases
 
@@ -118,13 +146,21 @@ classDiagram
 
 ```
 
-Este diagrama de clases ilustra la relación entre las entidades principales de la API. Cada **Lugar** está asociado con una **Dirección** y una **Categoría**.
+Este diagrama de clases muestra la relación entre las entidades principales de la API. Cada **Lugar** está asociado con una **Dirección** y una **Categoría**.
 
 ## Pruebas
+
+Las pruebas unitarias se ejecutaron correctamente utilizando `pytest`, confirmando que todos los casos de prueba para la API de lugares pasaron sin problemas.
+
+- Se recolectaron 9 items de prueba, incluyendo pruebas para la configuración, el CRUD de lugares, direcciones y categorías.
+
+![alt text](assets/image-6.png)
 
 Puedes acceder a la documentación generada por Swagger en la ruta `/docs`. Esta interfaz permite probar los diferentes endpoints directamente desde el navegador. Para acceder, abre `http://localhost:8000/docs`.
 
 ![alt text](assets/image.png)
+
+![alt text](assets/image-5.png)
 
 ![alt text](assets/image-1.png)
 
@@ -143,3 +179,37 @@ Puedes acceder a la documentación generada por Swagger en la ruta `/docs`. Esta
 | `pip install couchdb`           | Instala la librería de Python para interactuar con CouchDB.                       |
 | `pip freeze > requirements.txt` | Guarda una lista de las dependencias instaladas en un archivo `requirements.txt`. |
 | `uvicorn main:app --reload`     | Ejecuta el servidor FastAPI con recarga automática en caso de cambios.            |
+| `docker-compose up	`    | Levanta los servicios definidos en el archivo docker-compose.yml.                         |
+| `docker-compose up -d	`     | Ejecuta los servicios de Docker Compose en segundo plano (modo detached).             |
+
+## Diagrama de casos de uso
+
+![alt text](assets/image-4.png)
+
+## Diagrama del funcionamiento de la API Lugares
+
+
+```mermaid
+
+graph TD
+    subgraph Elastika[Servidor Elastika]
+        subgraph Docker[Contenedor - Docker]
+            API[API de Lugares]
+        end
+
+        subgraph ElasticSearchServer[Contenedor - Docker]
+            CouchDB[(CouchDB)]
+        end
+    end
+
+    Cliente[Cliente - Servicio Web/Móvil]
+    
+    API --> |NoSQL| CouchDB
+    Cliente --> |Métodos GET, POST, PUT, DELETE| API
+    API --> |Respuestas HTTP| Cliente
+
+    style Cliente fill:#b3d9ff,stroke:#333,stroke-width:2px
+    style ElasticSearchServer fill:#ffb3b3,stroke:#333,stroke-width:2px
+    style Docker fill:#d1e0e0,stroke:#333,stroke-width:2px
+    style Elastika fill:#f7d794,stroke:#333,stroke-width:2px
+```
