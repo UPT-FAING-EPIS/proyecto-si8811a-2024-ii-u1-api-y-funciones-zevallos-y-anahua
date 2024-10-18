@@ -1,9 +1,25 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/vK6WBQ1t)
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=15560954)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/UPT-FAING-EPIS/proyecto-si8811a-2024-ii-u1-api-y-funciones-zevallos-y-anahua)
+![Docker Image Version](https://img.shields.io/docker/v/palbertt/proyecto-si8811a-2024-ii-u1-api-y-funciones-zevallos-y-anahua?label=docker&logo=docker)
 
 ## API de Lugares
 
-Esta API permite gestionar lugares, direcciones y categorías utilizando FastAPI y CouchDB como base de datos.
+Este repositorio incluye el desarrollo y la documentación de una API diseñada para gestionar lugares, direcciones y categorías. La API utiliza FastAPI como framework y CouchDB para la base de datos. El proyecto permite realizar operaciones CRUD (crear, leer, actualizar, eliminar) sobre estos recursos mediante solicitudes HTTP, y está preparado para ser desplegado con Docker.
+
+## Índice
+
+- [API de Lugares](#api-de-lugares)
+- [Índice](#índice)
+- [Requisitos](#requisitos)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Desplegando con Docker Compose](#desplegando-con-docker-compose)
+- [Instalación Local](#instalación-local)
+- [Endpoints](#endpoints)
+- [Diagramas](#diagramas)
+- [Pruebas](#pruebas)
+- [Comandos](#comandos)
+- [Video](#video)
 
 ## Requisitos
 
@@ -36,16 +52,24 @@ api_lugares/
 └── dev-requirements.txt
 
 ```
-## Usando un archivo de Docker Compose
 
-1. Para levantar los servicios definidos en el archivo docker-compose.yml, utilizamos el comando:
-   ```bash
-   docker-compose up
-   ```
-   Otra opcion es ejecutar los contenedores en segundo plano, evitando que los logs se muestren en la consola con la opción -d (detached mode):
-   ```bash
-   docker-compose up -d
-   ```
+## Desplegando con Docker Compose
+
+Para levantar los servicios definidos en el archivo docker-compose.yml, utilizamos el comando:
+
+```bash
+docker-compose up
+```
+
+Otra opcion es ejecutar los contenedores en segundo plano, evitando que los logs se muestren en la consola con la opción -d (detached mode):
+
+```bash
+docker-compose up -d
+```
+
+Puedes consultar la imagen del proyecto en Docker Hub:
+
+🐳 [Ver imagen en Docker Hub](https://hub.docker.com/r/palbertt/proyecto-si8811a-2024-ii-u1-api-y-funciones-zevallos-y-anahua/tags)
 
 ## Instalación Local
 
@@ -85,7 +109,7 @@ api_lugares/
    uvicorn main:app --reload
    ```
 
-### Endpoints
+## Endpoints
 
 - **Lugares**
 
@@ -111,7 +135,17 @@ api_lugares/
   - `PUT /categorias/{id_categoria}`: Actualizar una categoría por su ID.
   - `DELETE /categorias/{id_categoria}`: Desactivar una categoría por su ID.
 
-## Diagrama de Clases
+- **Documentación**
+
+  - `GET /docs`: [Documentación Swagger](http://localhost:8000/docs).
+  - `GET /redoc`: [Documentación ReDoc](http://localhost:8000/redoc).
+
+- **CouchDB Dashboard**
+  - `GET http://localhost:5984/_utils`: [Acceso a la interfaz de CouchDB](http://localhost:5984/_utils).
+
+## Diagramas
+
+- Diagrama de Clases
 
 ```mermaid
 
@@ -148,6 +182,37 @@ classDiagram
 
 Este diagrama de clases muestra la relación entre las entidades principales de la API. Cada **Lugar** está asociado con una **Dirección** y una **Categoría**.
 
+- Diagrama de casos de uso
+
+  ![alt text](assets/image-4.png)
+
+- Diagrama del funcionamiento de la API Lugares
+
+```mermaid
+
+graph TD
+    subgraph Elastika[Servidor Elastika]
+        subgraph Docker[Contenedor - Docker]
+            API[API de Lugares]
+        end
+
+        subgraph ElasticSearchServer[Contenedor - Docker]
+            CouchDB[(CouchDB)]
+        end
+    end
+
+    Cliente[Cliente - Servicio Web/Móvil]
+
+    API --> |NoSQL| CouchDB
+    Cliente --> |Métodos GET, POST, PUT, DELETE| API
+    API --> |Respuestas HTTP| Cliente
+
+    style Cliente fill:#b3d9ff,stroke:#333,stroke-width:2px
+    style ElasticSearchServer fill:#ffb3b3,stroke:#333,stroke-width:2px
+    style Docker fill:#d1e0e0,stroke:#333,stroke-width:2px
+    style Elastika fill:#f7d794,stroke:#333,stroke-width:2px
+```
+
 ## Pruebas
 
 Las pruebas unitarias se ejecutaron correctamente utilizando `pytest`, confirmando que todos los casos de prueba para la API de lugares pasaron sin problemas.
@@ -178,38 +243,15 @@ Puedes acceder a la documentación generada por Swagger en la ruta `/docs`. Esta
 | `pip install fastapi uvicorn`   | Instala FastAPI y Uvicorn en el entorno actual.                                   |
 | `pip install couchdb`           | Instala la librería de Python para interactuar con CouchDB.                       |
 | `pip freeze > requirements.txt` | Guarda una lista de las dependencias instaladas en un archivo `requirements.txt`. |
+| `pytest -v`                     | Ejecuta pruebas unitarias con un nivel detallado de salida (verbose).             |
+| `docker ps`                     | Muestra una lista de los contenedores Docker que están corriendo.                 |
+| `docker ps -a`                  | Muestra una lista de todos los contenedores Docker, incluyendo los detenidos.     |
+| `docker-compose up`             | Levanta los servicios definidos en el archivo docker-compose.yml.                 |
+| `docker-compose up -d`          | Ejecuta los servicios de Docker Compose en segundo plano (modo detached).         |
 | `uvicorn main:app --reload`     | Ejecuta el servidor FastAPI con recarga automática en caso de cambios.            |
-| `docker-compose up	`    | Levanta los servicios definidos en el archivo docker-compose.yml.                         |
-| `docker-compose up -d	`     | Ejecuta los servicios de Docker Compose en segundo plano (modo detached).             |
 
-## Diagrama de casos de uso
+## Video
 
-![alt text](assets/image-4.png)
+Explicacion de diferentes aspectos sobre la API de Lugares:
 
-## Diagrama del funcionamiento de la API Lugares
-
-
-```mermaid
-
-graph TD
-    subgraph Elastika[Servidor Elastika]
-        subgraph Docker[Contenedor - Docker]
-            API[API de Lugares]
-        end
-
-        subgraph ElasticSearchServer[Contenedor - Docker]
-            CouchDB[(CouchDB)]
-        end
-    end
-
-    Cliente[Cliente - Servicio Web/Móvil]
-    
-    API --> |NoSQL| CouchDB
-    Cliente --> |Métodos GET, POST, PUT, DELETE| API
-    API --> |Respuestas HTTP| Cliente
-
-    style Cliente fill:#b3d9ff,stroke:#333,stroke-width:2px
-    style ElasticSearchServer fill:#ffb3b3,stroke:#333,stroke-width:2px
-    style Docker fill:#d1e0e0,stroke:#333,stroke-width:2px
-    style Elastika fill:#f7d794,stroke:#333,stroke-width:2px
-```
+🎥 [Ver video de la API de Lugares (Release v0.1.0)](https://drive.google.com/file/d/13M5tyNbeWF1lK9fwnD9u-SMbgLkQa6nI/view?usp=sharing)
