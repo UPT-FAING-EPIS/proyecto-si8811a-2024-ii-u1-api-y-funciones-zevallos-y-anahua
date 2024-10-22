@@ -1,25 +1,47 @@
+name: Build and Push Docker Image (Desarrollo)
+
 on:
   push:
     branches:
       - Desarrollo
-name: deploy
+
 jobs:
-  deploy:
-    name: Deploy
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Login
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Build and push to Docker Hub
-        uses: docker/build-push-action@v2
-        with:
-          context: ./api_lugares
-          file: ./api_lugares/Dockerfile
-          push: true
-          tags: maynerac/api-lugares:${{ github.sha }}
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_PAT }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./api_lugares
+        file: ./api_lugares/Dockerfile
+        push: true
+        tags: |
+          maynerac/api-lugares:${{ github.sha }}
+          maynerac/api-lugares:latest
+          ghcr.io/maynerac/api-lugares:${{ github.sha }}
+          ghcr.io/maynerac/api-lugares:latest
+        labels: |
+          org.opencontainers.image.source=${{ github.repository }}
