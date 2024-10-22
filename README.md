@@ -69,7 +69,9 @@ docker-compose up -d
 
 Puedes consultar la imagen del proyecto en Docker Hub:
 
-🐳 [Ver imagen en Docker Hub](https://hub.docker.com/r/palbertt/proyecto-si8811a-2024-ii-u1-api-y-funciones-zevallos-y-anahua/tags)
+🐳 [Ver imagen en Docker Hub](https://hub.docker.com/repository/docker/maynerac/api-lugares/general)
+
+📦 [Ver imagen en GitHub Container Registry](https://github.com/users/MAYnerAC/packages/container/package/api-lugares)
 
 ## Instalación Local
 
