@@ -165,10 +165,22 @@ docker ps -a
 docker volume ls
 ```
 
-6. Eliminamos los volumnes en caso lo necesitemos(Opcional)
+6. Eliminamos los volumnes en caso lo necesitemos (Opcional)
 
 ```bash
 docker volume rm couchdb_data
+```
+
+7. Eliminamos la red personalizada `apidb_network` (Opcional)
+
+```bash
+docker network rm apidb_network
+```
+
+8. Verificamos que se haya eliminado `apidb_network`
+
+```bash
+docker network ls
 ```
 
 ## Endpoints
