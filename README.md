@@ -111,6 +111,66 @@ Puedes consultar la imagen del proyecto en Docker Hub:
    uvicorn main:app --reload
    ```
 
+## Usando docker run
+
+1. Creamos la red personalizada antes de crear los servicios por separado
+
+```bash
+docker network create apidb_network
+```
+
+2. Creamos el servicio `couchdb`, podemos cambiar las variables de entorno `COUCHDB_USER` y `COUCHDB_PASSWORD`
+
+```bash
+docker run -d --name couchdb --network apidb_network -p 5984:5984 -v couchdb_data:/opt/couchdb/data -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=admin couchdb:latest
+```
+
+3. Creamos el servicio `fastapi`, el formato de `COUCHDB_URL` es `http://usuario:contrasena@localhost:5984`
+
+```bash
+docker run -d --name fastapi --network apidb_network -p 8000:8000 -e COUCHDB_URL=http://admin:admin@couchdb:5984 maynerac/api-lugares:latest
+```
+
+## Eliminar los contenedores creados
+
+1. Listamos los contenedrores activos y detenidos
+
+```bash
+docker ps -a
+```
+
+2. Si estan en ejecucion, detenemos los contenedores
+
+```bash
+docker stop couchdb
+docker stop fastapi
+```
+
+3. Eliminamos los contenedores
+
+```bash
+docker rm couchdb
+docker rm fastapi
+```
+
+4. Verificamos su correcta eliminacion
+
+```bash
+docker ps -a
+```
+
+5. Revisamos si tenemos un volumen creado
+
+```bash
+docker volume ls
+```
+
+6. Eliminamos los volumnes en caso lo necesitemos(Opcional)
+
+```bash
+docker volume rm couchdb_data
+```
+
 ## Endpoints
 
 - **Lugares**
