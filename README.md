@@ -15,6 +15,9 @@ Este repositorio incluye el desarrollo y la documentación de una API diseñada 
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Desplegando con Docker Compose](#desplegando-con-docker-compose)
 - [Instalación Local](#instalación-local)
+- [Usando docker run utilizando la IP del servicio de CouchDB](#usando-docker-run-utilizando-la-ip-del-servicio-de-couchdb)
+- [Usando docker run con una red personalizada](#usando-docker-run-con-una-red-personalizada)
+- [Eliminar los contenedores creados](#eliminar-los-contenedores-creados)
 - [Endpoints](#endpoints)
 - [Diagramas](#diagramas)
 - [Pruebas](#pruebas)
@@ -111,7 +114,21 @@ Puedes consultar la imagen del proyecto en Docker Hub:
    uvicorn main:app --reload
    ```
 
-## Usando docker run
+## Usando docker run utilizando la IP del servicio de CouchDB
+
+1. Iniciamos el contenedor de CouchDB
+
+```bash
+docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=admin couchdb:latest
+```
+
+2. Iniciamos el contenedor de la API Lugares, asegurarnos que "172.17.0.2" sea la IP correcta, podemos usar `docker inspect couchdb` para verificarlo
+
+```bash
+docker run -d --name fastapi -p 8000:8000 -e COUCHDB_URL=http://admin:admin@172.17.0.2:5984 maynerac/api-lugares:latest
+```
+
+## Usando docker run con una red personalizada
 
 1. Creamos la red personalizada antes de crear los servicios por separado
 
@@ -328,4 +345,6 @@ Puedes acceder a la documentación generada por Swagger en la ruta `/docs`. Esta
 
 Explicacion de diferentes aspectos sobre la API de Lugares:
 
-🎥 [Ver video de la API de Lugares (Release v0.1.0)](https://drive.google.com/file/d/13M5tyNbeWF1lK9fwnD9u-SMbgLkQa6nI/view?usp=sharing)
+📂 [Ver video de la API de Lugares (Release v0.1.0) - YouTube](https://drive.google.com/file/d/13M5tyNbeWF1lK9fwnD9u-SMbgLkQa6nI/view?usp=sharing)
+
+🎥 [Ver video de la API de Lugares (Release v0.1.0) - Google Drive](https://www.youtube.com/watch?v=_J36U9vYtoo)
